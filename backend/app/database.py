@@ -18,13 +18,16 @@ elif DATABASE_URL.startswith("postgresql://"):
 
 is_sqlite = DATABASE_URL.startswith("sqlite")
 
-engine_options = {"pool_pre_ping": True}
 if is_sqlite:
     engine_options = {"connect_args": {"check_same_thread": False}}
-elif os.getenv("VERCEL"):
-    # Serverless functions start and stop all the time, so do not keep idle
-    # connections open between requests.
-    engine_options = {"poolclass": NullPool}
+else:
+    # prepare_threshold=None turns off server-side prepared statements, which
+    # hosted connection poolers (such as Neon's "pooled" connection) can break.
+    engine_options = {"pool_pre_ping": True, "connect_args": {"prepare_threshold": None}}
+    if os.getenv("VERCEL"):
+        # Serverless functions start and stop all the time, so do not keep idle
+        # connections open between requests.
+        engine_options["poolclass"] = NullPool
 
 engine = create_engine(DATABASE_URL, **engine_options)
 SessionLocal = sessionmaker(bind=engine, autoflush=False)
