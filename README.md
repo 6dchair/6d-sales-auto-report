@@ -1,4 +1,4 @@
-# MotoMetrics — Sales Reporting System
+# 6dMetrx — Sales Reporting Automation System
 
 A sales reporting web app for a (synthetic) motorcycle dealership: dashboard,
 sales records with CSV import, inventory with low-stock warnings, and reports
