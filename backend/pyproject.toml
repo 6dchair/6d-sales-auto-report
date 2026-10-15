@@ -1,0 +1,17 @@
+# Tells Vercel where the FastAPI app is, and which packages to install online.
+# Keep `dependencies` in step with requirements.txt (used for local installs).
+[project]
+name = "motometrics-api"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi",
+  "sqlalchemy",
+  "pydantic",
+  "python-multipart",
+  "reportlab",
+  "psycopg[binary]",
+]
+
+[tool.vercel]
+entrypoint = "app.main:app"

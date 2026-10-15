@@ -1,0 +1,31 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.autoreportvenv/
+*.egg-info/
+.pytest_cache/
+
+# ---- Local databases (the demo data is regenerated with `python -m app.seed`) ----
+*.db
+*.sqlite
+*.sqlite3
+
+# ---- Node / Vite ----
+node_modules/
+dist/
+*.tsbuildinfo
+
+# ---- Secrets: never commit real values. Keep the .env.example files. ----
+.env
+.env.*
+!.env.example
+
+# ---- Vercel, editors, OS, logs ----
+.vercel/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log

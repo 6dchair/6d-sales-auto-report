@@ -1,0 +1,226 @@
+.stock-alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  color: var(--amber);
+  background: var(--amber-soft);
+  border: 1px solid #ecd596;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+}
+
+.inv-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  color: var(--green);
+  background: var(--green-soft);
+  border: 1px solid var(--green-line);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 14px;
+  padding: 0 22px 18px;
+}
+
+.filter-bar .field {
+  min-width: 170px;
+}
+
+.filter-bar .field.grow {
+  flex: 1 1 240px;
+}
+
+.inventory-page .transactions-table th.num,
+.inventory-page .transactions-table td.num {
+  text-align: right;
+}
+
+.inventory-page .on-hand {
+  font-weight: 700;
+}
+
+.stock-pill {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 1px solid;
+  border-radius: 3px;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.stock-pill.ok {
+  color: var(--green);
+  background: var(--green-soft);
+  border-color: var(--green-line);
+}
+
+.stock-pill.low {
+  color: var(--amber);
+  background: var(--amber-soft);
+  border-color: #ecd596;
+}
+
+.stock-pill.out,
+.stock-pill.oversold {
+  color: var(--red);
+  background: var(--red-soft);
+  border-color: var(--red-line);
+}
+
+.stock-pill.untracked {
+  color: var(--muted);
+  background: var(--head);
+  border-color: var(--line);
+}
+
+.inventory-page .row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.history-panel {
+  margin-bottom: 22px;
+}
+
+.history-filter {
+  min-width: 220px;
+}
+
+.history-table {
+  margin-top: 16px;
+  max-height: 420px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.history-table .transactions-table th {
+  position: sticky;
+  top: 0;
+}
+
+.change.up {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.change.down {
+  color: var(--red);
+  font-weight: 700;
+}
+
+.note-cell {
+  max-width: 320px;
+  overflow: hidden;
+  color: var(--muted);
+  text-overflow: ellipsis;
+}
+
+/* ----- forms inside dialogs ----- */
+
+.modal-form {
+  display: grid;
+  gap: 16px;
+}
+
+.modal-product {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 14px;
+  margin: 0;
+  background: var(--stripe);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.modal-product span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.field-hint {
+  color: var(--faint);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.checkbox-row input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--blue);
+}
+
+.checkbox-row small {
+  display: block;
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 400;
+}
+
+.stock-preview {
+  padding: 10px 14px;
+  color: var(--navy);
+  background: var(--blue-soft);
+  border: 1px solid var(--blue-line);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+}
+
+.stock-preview.bad {
+  color: var(--red);
+  background: var(--red-soft);
+  border-color: var(--red-line);
+}
+
+.modal-error {
+  margin: 0;
+}
+
+.modal-actions {
+  justify-content: flex-end;
+  padding-top: 4px;
+}
+
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-bar {
+    padding: 0 16px 16px;
+  }
+}
