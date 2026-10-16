@@ -301,7 +301,7 @@ export default function SalesPage({
         )}
       </section>
 
-      <section className="panel transactions-panel">
+      <section className="panel transactions-panel" id="transactions-results">
         <div className="panel-heading transaction-heading">
           <div>
             <h2>All sales</h2>

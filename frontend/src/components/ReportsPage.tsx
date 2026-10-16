@@ -282,35 +282,39 @@ export default function ReportsPage({ systemName }: { systemName?: string }) {
               data={chartData}
               margin={{ top: 12, right: 8, left: -14, bottom: 0 }}
             >
-              <CartesianGrid stroke="#e4e8ed" strokeDasharray="4 4" vertical={false} />
+              <CartesianGrid stroke="#4a55d8" strokeDasharray="4 4" vertical={false} />
               <XAxis
                 dataKey="date"
                 tickFormatter={formatShortDate}
                 minTickGap={28}
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "#5f6b7a", fontSize: 12 }}
+                tick={{ fill: "#aab0f2", fontSize: 17 }}
                 dy={10}
               />
               <YAxis
                 tickFormatter={formatAxisCurrency}
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "#5f6b7a", fontSize: 12 }}
-                width={58}
+                tick={{ fill: "#aab0f2", fontSize: 17 }}
+                width={66}
               />
               <Tooltip
-                cursor={{ fill: "#e9eff7" }}
+                cursor={{ fill: "rgba(225, 225, 225, 0.15)" }}
                 labelFormatter={(label) => formatShortDate(String(label))}
                 formatter={(amount) => [currency(Number(amount)), "Net sales"]}
+                labelStyle={{ color: "#e1e1e1" }}
+                itemStyle={{ color: "#e1e1e1" }}
                 contentStyle={{
-                  borderRadius: 10,
-                  border: "1px solid #e4e8ed",
-                  boxShadow: "0 6px 24px #18244712",
-                  fontSize: 13,
+                  background: "#000fc0",
+                  border: "2px solid #e1e1e1",
+                  borderRadius: 0,
+                  boxShadow: "4px 4px 0 #00096e",
+                  color: "#e1e1e1",
+                  fontSize: 18,
                 }}
               />
-              <Bar dataKey="sales" fill="#1f4e8c" radius={[4, 4, 0, 0]} maxBarSize={28} />
+              <Bar dataKey="sales" fill="#e1e1e1" maxBarSize={22} />
             </BarChart>
           </ResponsiveContainer>
 
@@ -321,10 +325,10 @@ export default function ReportsPage({ systemName }: { systemName?: string }) {
           )}
         </div>
 
-        <div className="chart-note">
-          <span>
-            {startDate} to {endDate}
-          </span>
+        <div className="osd-timeline">
+          <span>Begin {startDate}</span>
+          <div className="osd-timeline-bar" />
+          <span>End {endDate}</span>
         </div>
       </section>
 

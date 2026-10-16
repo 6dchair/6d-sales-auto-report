@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from "react";
 import { api } from "./services/api";
 import type {
@@ -10,6 +11,7 @@ import type {
 import { Icon, LogoMark } from "./components/Icon";
 import SettingsPage from "./components/SettingsPage";
 import UserMenu from "./components/UserMenu";
+import OsdClock from "./components/OsdClock";
 import InventoryPage from "./components/InventoryPage";
 import { initialsOf, useProfiles } from "./hooks/useProfiles";
 import { useSystemName } from "./hooks/useSystemName";
@@ -26,6 +28,7 @@ import SalesPage from "./components/SalesPage";
 import ReportsPage from "./components/ReportsPage";
 import { matchesSearch } from "./utils/search";
 import { currency, formatAxisCurrency, formatLocalDate, formatShortDate } from "./utils/format";
+import "@fontsource/vt323";
 import "./App.css";
 
 const navigation = ["Dashboard", "Sales", "Inventory", "Reports"];
@@ -409,6 +412,7 @@ function App() {
           </div>
 
           <div className="topbar-actions">
+            <OsdClock />
             {searchable && (
               <div className="search-box">
                 <Icon name="search" size={16} />
@@ -429,7 +433,7 @@ function App() {
                       }
                     }
                   }}
-                  placeholder="Search reference, product or date"
+                  placeholder="Search ref, product, date"
                   aria-label="Search sales"
                 />
                 <span className="search-shortcut">/</span>
@@ -682,19 +686,19 @@ function App() {
                         >
                           <stop
                             offset="0%"
-                            stopColor="#1f4e8c"
-                            stopOpacity={0.18}
+                            stopColor="#e1e1e1"
+                            stopOpacity={0.35}
                           />
                           <stop
                             offset="100%"
-                            stopColor="#1f4e8c"
-                            stopOpacity={0.01}
+                            stopColor="#e1e1e1"
+                            stopOpacity={0.02}
                           />
                         </linearGradient>
                       </defs>
 
                       <CartesianGrid
-                        stroke="#e4e8ed"
+                        stroke="#4a55d8"
                         strokeDasharray="4 4"
                         vertical={false}
                       />
@@ -705,16 +709,16 @@ function App() {
                         minTickGap={28}
                         axisLine={false}
                         tickLine={false}
-                        tick={{ fill: "#5f6b7a", fontSize: 12 }}
+                        tick={{ fill: "#aab0f2", fontSize: 17 }}
                         dy={10}
                       />
 
                       <YAxis
                         axisLine={false}
                         tickLine={false}
-                        tick={{ fill: "#5f6b7a", fontSize: 12 }}
+                        tick={{ fill: "#aab0f2", fontSize: 17 }}
                         tickFormatter={formatAxisCurrency}
-                        width={58}
+                        width={66}
                       />
 
                       <Tooltip
@@ -722,23 +726,29 @@ function App() {
                           currency(Number(value)),
                           "Net sales",
                         ]}
+                        cursor={{ stroke: "#e1e1e1", strokeDasharray: "4 4" }}
+                        labelStyle={{ color: "#e1e1e1" }}
+                        itemStyle={{ color: "#e1e1e1" }}
                         contentStyle={{
-                          borderRadius: 10,
-                          border: "1px solid #e4e8ed",
-                          boxShadow: "0 6px 24px #18244712",
-                          fontSize: 13,
+                          background: "#000fc0",
+                          border: "2px solid #e1e1e1",
+                          borderRadius: 0,
+                          boxShadow: "4px 4px 0 #00096e",
+                          color: "#e1e1e1",
+                          fontSize: 18,
                         }}
                       />
 
                       <Area
-                        type="monotone"
+                        type="linear"
                         dataKey="sales"
-                        stroke="#1f4e8c"
+                        stroke="#e1e1e1"
                         strokeWidth={2.5}
                         fill="url(#salesGradient)"
                         activeDot={{
                           r: 5,
-                          stroke: "#fff",
+                          fill: "#e1e1e1",
+                          stroke: "#000fc0",
                           strokeWidth: 2,
                         }}
                       />

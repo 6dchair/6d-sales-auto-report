@@ -1,10 +1,10 @@
-# 6dMetrx — Sales Reporting Automation System
+# MotoMetrics — Sales Reporting System
 
 A sales reporting web app for a (synthetic) motorcycle dealership: dashboard,
 sales records with CSV import, inventory with low-stock warnings, and reports
 you can download as PDF or CSV.
 
-- **Frontend:** React + TypeScript + Vite, Recharts
+- **Frontend:** React + TypeScript + Vite, Recharts, VT323 pixel font (`@fontsource/vt323`)
 - **Backend:** FastAPI + SQLAlchemy, ReportLab (PDF)
 - **Database:** SQLite locally, PostgreSQL online
 

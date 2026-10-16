@@ -15,19 +15,18 @@
   display: grid;
   gap: 4px;
   color: var(--muted);
-  font-size: 12.5px;
+  font-size: 18px;
   font-weight: 600;
 }
 
 .report-dates input,
 .report-downloads select {
-  height: 38px;
+  height: 40px;
   padding: 0 10px;
-  color: var(--ink);
-  background: #fff;
-  border: 1px solid #b7bfca;
-  border-radius: var(--radius-sm);
-  font-size: 14px;
+  color: var(--osd-white);
+  background: var(--osd-deep);
+  border: var(--border);
+  font-size: 22px;
 }
 
 .report-downloads {
@@ -60,7 +59,7 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 10px;
-  font-size: 14px;
+  font-size: 20px;
 }
 
 .category-row-top strong {
@@ -74,21 +73,22 @@
 }
 
 .category-bar {
-  height: 10px;
+  height: 16px;
   margin: 7px 0 5px;
   overflow: hidden;
-  background: var(--head);
-  border: 1px solid var(--line-soft);
+  border: var(--border);
+  /* segments, like the VCR volume meter */
+  background: repeating-linear-gradient(90deg, var(--line-soft) 0, var(--line-soft) 8px, transparent 8px, transparent 11px);
 }
 
 .category-bar-fill {
   height: 100%;
-  background: var(--blue);
+  background: repeating-linear-gradient(90deg, var(--osd-white) 0, var(--osd-white) 8px, transparent 8px, transparent 11px);
 }
 
 .category-row-foot {
   color: var(--muted);
-  font-size: 12.5px;
+  font-size: 18px;
 }
 
 @media (max-width: 900px) {

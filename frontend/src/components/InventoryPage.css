@@ -8,9 +8,9 @@
   margin-bottom: 18px;
   color: var(--amber);
   background: var(--amber-soft);
-  border: 1px solid #ecd596;
-  border-radius: var(--radius-sm);
-  font-size: 14px;
+  border: 2px solid var(--osd-yellow);
+  border-radius: 0;
+  font-size: 20px;
 }
 
 .inv-notice {
@@ -22,9 +22,9 @@
   margin-bottom: 18px;
   color: var(--green);
   background: var(--green-soft);
-  border: 1px solid var(--green-line);
-  border-radius: var(--radius-sm);
-  font-size: 14px;
+  border: 2px solid var(--green-line);
+  border-radius: 0;
+  font-size: 20px;
   font-weight: 600;
 }
 
@@ -55,36 +55,35 @@
 
 .stock-pill {
   display: inline-block;
-  padding: 2px 10px;
-  border: 1px solid;
-  border-radius: 3px;
-  font-size: 12.5px;
-  font-weight: 600;
+  padding: 0 10px;
+  border: 2px solid;
+  font-size: 19px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .stock-pill.ok {
-  color: var(--green);
-  background: var(--green-soft);
-  border-color: var(--green-line);
+  color: var(--osd-green);
+  border-color: var(--osd-green);
 }
 
 .stock-pill.low {
-  color: var(--amber);
-  background: var(--amber-soft);
-  border-color: #ecd596;
+  color: var(--osd-blue);
+  background: var(--osd-yellow);
+  border-color: var(--osd-yellow);
 }
 
 .stock-pill.out,
 .stock-pill.oversold {
-  color: var(--red);
-  background: var(--red-soft);
-  border-color: var(--red-line);
+  color: var(--osd-blue);
+  background: var(--osd-red);
+  border-color: var(--osd-red);
 }
 
 .stock-pill.untracked {
   color: var(--muted);
-  background: var(--head);
-  border-color: var(--line);
+  background: transparent;
+  border-color: var(--faint);
 }
 
 .inventory-page .row-actions {
@@ -106,8 +105,8 @@
   margin-top: 16px;
   max-height: 420px;
   overflow-y: auto;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
+  border: 2px solid var(--line);
+  border-radius: 0;
 }
 
 .history-table .transactions-table th {
@@ -146,13 +145,13 @@
   padding: 10px 14px;
   margin: 0;
   background: var(--stripe);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
+  border: 2px solid var(--line);
+  border-radius: 0;
 }
 
 .modal-product span {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 19px;
 }
 
 .form-grid {
@@ -163,7 +162,7 @@
 
 .field-hint {
   color: var(--faint);
-  font-size: 12px;
+  font-size: 17px;
   font-weight: 400;
 }
 
@@ -172,7 +171,7 @@
   align-items: flex-start;
   gap: 10px;
   color: var(--ink);
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -187,7 +186,7 @@
 .checkbox-row small {
   display: block;
   color: var(--muted);
-  font-size: 12.5px;
+  font-size: 18px;
   font-weight: 400;
 }
 
@@ -195,9 +194,9 @@
   padding: 10px 14px;
   color: var(--navy);
   background: var(--blue-soft);
-  border: 1px solid var(--blue-line);
-  border-radius: var(--radius-sm);
-  font-size: 14px;
+  border: 2px solid var(--blue-line);
+  border-radius: 0;
+  font-size: 20px;
 }
 
 .stock-preview.bad {
@@ -223,4 +222,25 @@
   .filter-bar {
     padding: 0 16px 16px;
   }
+}
+
+/* the inventory table has many columns: tighter padding so Actions stays in view */
+.inventory-page .transactions-table th,
+.inventory-page .transactions-table td {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.inventory-page .transactions-table th:first-child,
+.inventory-page .transactions-table td:first-child {
+  padding-left: 22px;
+}
+
+.inventory-page .transactions-table th:last-child,
+.inventory-page .transactions-table td:last-child {
+  padding-right: 22px;
+}
+
+.inventory-page .row-actions {
+  gap: 12px;
 }
