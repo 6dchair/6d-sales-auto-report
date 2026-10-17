@@ -975,7 +975,7 @@ function App() {
             </section>
 
             <footer className="dashboard-footer">
-              <span>© 2026 {systemName}</span>
+              <span>© 2026 {systemName} by 6dchair</span>
               <span>
                 <span className="footer-status-dot" />
                 Sales reporting workspace
