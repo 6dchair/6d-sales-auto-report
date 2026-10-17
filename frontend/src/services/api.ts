@@ -12,6 +12,7 @@ import type {
   InventoryResponse,
   StockMovement,
   StockMovementCreate,
+  Category,
 } from "../types";
 
 const API_BASE_URL =
@@ -76,6 +77,29 @@ function dateQuery(startDate?: string, endDate?: string, extra?: Record<string, 
 
 export const api = {
   getProducts: () => request<Product[]>("/api/products"),
+
+  getCategories: () => request<Category[]>("/api/categories"),
+
+  createCategory: (name: string) =>
+    request<Category>("/api/categories", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name }),
+    }),
+
+  renameCategory: (id: number, name: string) =>
+    request<Category>(`/api/categories/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name }),
+    }),
+
+  deleteCategory: async (id: number): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL}/api/categories/${id}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) throw new Error(await errorMessage(response));
+  },
 
   getSales: () => request<Sale[]>("/api/sales"),
 

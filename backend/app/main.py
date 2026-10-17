@@ -5,17 +5,21 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from .database import Base, engine
+from .database import Base, SessionLocal, engine
 from . import models
 from .migrations import ensure_columns
-from .routers import inventory, reports, sales
+from .routers import categories, inventory, reports, sales
 
 Base.metadata.create_all(bind=engine)
 ensure_columns(engine)
 
+# Make sure every category already used by a product is in the categories list.
+with SessionLocal() as _db:
+    categories.sync_categories(_db)
+
 app = FastAPI(
     title="Automated Sales Reporting API",
-    description="Sales data API for a synthetic motorcycle dealership portfolio project.",
+    description="Sales data API for any business.",
     version="0.1.0",
 )
 
@@ -41,6 +45,7 @@ app.add_middleware(
 app.include_router(sales.router, prefix="/api", tags=["Sales"])
 app.include_router(reports.router, prefix="/api", tags=["Reports"])
 app.include_router(inventory.router, prefix="/api", tags=["Inventory"])
+app.include_router(categories.router, prefix="/api", tags=["Categories"])
 
 
 @app.get("/health")

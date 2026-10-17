@@ -1,4 +1,3 @@
-
 export interface Product {
   id: number;
   name: string;
@@ -172,4 +171,10 @@ export interface StockMovementCreate {
   quantity: number;
   reason: StockReason;
   note?: string | null;
+}
+
+export interface Category {
+  id: number;
+  name: string;
+  product_count: number;
 }

@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy import func
 from sqlalchemy.orm import Session, selectinload
 from ..database import get_db
+from .categories import ensure_category
 from ..models import Product, Sale, SaleItem
 from ..schemas import (
     ImportErrorRow, ImportPreview, ProductCreate, ProductRead,
@@ -44,7 +45,9 @@ def create_product(payload: ProductCreate, db: Session = Depends(get_db)):
     existing = db.query(Product).filter(func.lower(Product.name) == payload.name.lower()).first()
     if existing:
         raise HTTPException(status_code=409, detail="A product with this name already exists.")
-    product = Product(**payload.model_dump())
+    data = payload.model_dump()
+    data["category"] = ensure_category(db, payload.category)
+    product = Product(**data)
     db.add(product)
     db.commit()
     db.refresh(product)
@@ -321,7 +324,7 @@ async def confirm_sales_csv(file: UploadFile = File(...), db: Session = Depends(
                 if not product:
                     product = Product(
                         name=item["product_name"],
-                        category=item["category"],
+                        category=ensure_category(db, item["category"]),
                         default_unit_price=item["unit_price"],
                     )
                     db.add(product)

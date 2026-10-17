@@ -31,9 +31,9 @@ const REQUIRED_COLUMNS = [
 // Two rows share a reference number to show that one sale can have many items.
 const TEMPLATE_CSV = [
   REQUIRED_COLUMNS.join(","),
-  "SALE-0001,2026-10-01,Full-face helmet,Accessories,1,3500,0",
-  "SALE-0001,2026-10-01,Riding gloves,Accessories,1,1200,100",
-  "SALE-0002,2026-10-02,Engine oil 1L,Parts,2,450,0",
+  "SALE-0001,2026-10-01,Product A,Category 1,2,150,0",
+  "SALE-0001,2026-10-01,Product B,Category 1,1,80,10",
+  "SALE-0002,2026-10-02,Product C,Category 2,3,45,0",
 ].join("\n");
 
 const messageOf = (error: unknown, fallback: string) =>

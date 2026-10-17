@@ -176,7 +176,7 @@ def _make_footer(system_name: str):
     return footer
 
 
-def build_pdf(report, system_name: str = "MotoMetrics") -> bytes:
+def build_pdf(report, system_name: str = "6dMetrix") -> bytes:
     styles = _styles()
     buffer = BytesIO()
     doc = SimpleDocTemplate(

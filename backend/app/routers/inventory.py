@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 from ..models import Product, Sale, SaleItem, StockMovement
 from ..schemas import ProductCreate, ProductRead
+from .categories import ensure_category
 
 router = APIRouter()
 
@@ -196,7 +197,9 @@ def update_product(product_id: int, payload: ProductCreate, db: Session = Depend
     if duplicate:
         raise HTTPException(status_code=409, detail="A product with this name already exists.")
 
-    for field, value in payload.model_dump().items():
+    data = payload.model_dump()
+    data["category"] = ensure_category(db, data["category"])
+    for field, value in data.items():
         setattr(product, field, value)
     db.commit()
     db.refresh(product)

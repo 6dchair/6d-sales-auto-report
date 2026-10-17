@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FormEvent, KeyboardEvent } from "react";
 import { initialsOf } from "../hooks/useProfiles";
 import type { AdminProfile } from "../hooks/useProfiles";
+import CategoriesPanel from "./CategoriesPanel";
 import "./SettingsPage.css";
 
 interface SettingsPageProps {
@@ -170,7 +171,7 @@ export default function SettingsPage({
           <div>
             <h2>Company name (system name)</h2>
             <p>
-              Replace “MotoMetrics” with your own company name. It appears in the
+              Replace “6dMetrix” with your own company name. It appears in the
               sidebar, browser tab, page footer and PDF reports.
             </p>
           </div>
@@ -217,6 +218,8 @@ export default function SettingsPage({
 
         {systemError && <div className="api-error settings-error">{systemError}</div>}
       </section>
+
+      <CategoriesPanel />
 
       <section className="panel settings-panel">
         <div className="panel-heading">
@@ -384,7 +387,7 @@ export default function SettingsPage({
             <input
               className="text-input"
               value={name}
-              placeholder="e.g. Maria Santos"
+              placeholder="e.g. Kurt Cobain"
               onChange={(event) => setName(event.target.value)}
               onKeyDown={onEscape(resetAdd)}
             />

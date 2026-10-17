@@ -67,3 +67,12 @@ class StockMovement(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, index=True)
 
     product: Mapped["Product"] = relationship(back_populates="stock_movements")
+
+
+class Category(Base):
+    """Master list of product categories (managed in Settings)."""
+
+    __tablename__ = "categories"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(80), unique=True, index=True)

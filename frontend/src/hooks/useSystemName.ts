@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
-export const DEFAULT_SYSTEM_NAME = "MotoMetrics";
-const STORAGE_KEY = "motometrics.systemName";
+export const DEFAULT_SYSTEM_NAME = "6dMetrix";
+const STORAGE_KEY = "6dmetrix.systemName";
 
 function load(): string {
   try {

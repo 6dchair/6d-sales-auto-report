@@ -1,5 +1,5 @@
 reference_number,sale_date,product_name,category,quantity,unit_price,discount
-INV-2026-001,2026-09-01,Motorcycle Model A,Motorcycle,2,85000.00,0.00
-INV-2026-001,2026-09-01,Engine Oil A,Spare parts,12,350.00,100.00
-INV-2026-002,2026-09-02,Brake Pad A,Spare parts,5,800.00,0.00
-INV-2026-003,2026-09-03,Motorcycle Model B,Motorcycle,1,92000.00,2000.00
+TXN-001,2026-10-10,Cow's Milk (1L),Dairy,40,85.00,0
+TXN-002,2026-10-11,Native Tomato,Vegetables,30,60.00,10
+TXN-003,2026-10-12,Fresh Eggs (30-pc tray),Poultry,15,270.00,25
+TXN-004,2026-10-13,Vermicast (25kg sack),Fertilizer,8,450.00,0

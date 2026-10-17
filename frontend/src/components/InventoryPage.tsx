@@ -33,6 +33,7 @@ const STATUS_LABEL: Record<StockStatus, string> = {
 };
 
 const MAX_QTY = 1_000_000;
+const NEW_CATEGORY = "__new__";
 
 const messageOf = (error: unknown, fallback: string) =>
   error instanceof Error ? error.message : fallback;
@@ -190,7 +191,9 @@ interface ProductFormProps {
 
 function ProductForm({ item, categories, onClose, onSaved }: ProductFormProps) {
   const [name, setName] = useState(item?.name ?? "");
-  const [category, setCategory] = useState(item?.category ?? "");
+  const [choice, setChoice] = useState(item?.category ?? categories[0] ?? NEW_CATEGORY);
+  const [newCategory, setNewCategory] = useState("");
+  const category = choice === NEW_CATEGORY ? newCategory : choice;
   const [price, setPrice] = useState(item ? String(Number(item.default_unit_price)) : "");
   const [cost, setCost] = useState(
     item?.unit_cost != null ? String(Number(item.unit_cost)) : ""
@@ -280,20 +283,33 @@ function ProductForm({ item, categories, onClose, onSaved }: ProductFormProps) {
       </label>
 
       <label className="field">
-        <span>Category</span>
-        <input
+        <span>Category (Add, Remove, and Edit in Settings)</span>
+        <select
           className="text-input"
-          list="inventory-categories"
-          value={category}
-          placeholder="e.g. Parts"
-          onChange={(event) => setCategory(event.target.value)}
-        />
-        <datalist id="inventory-categories">
+          value={choice}
+          onChange={(event) => setChoice(event.target.value)}
+        >
           {categories.map((value) => (
-            <option key={value} value={value} />
+            <option key={value} value={value}>
+              {value}
+            </option>
           ))}
-        </datalist>
+          <option value={NEW_CATEGORY}>+ Add new category…</option>
+        </select>
       </label>
+
+      {choice === NEW_CATEGORY && (
+        <label className="field">
+          <span>New category name</span>
+          <input
+            className="text-input"
+            value={newCategory}
+            autoFocus
+            placeholder="e.g. Dairy"
+            onChange={(event) => setNewCategory(event.target.value)}
+          />
+        </label>
+      )}
 
       <div className="form-grid">
         <label className="field">
@@ -387,6 +403,7 @@ export default function InventoryPage({ onChanged }: InventoryPageProps) {
   const [error, setError] = useState("");
   const [reloadKey, setReloadKey] = useState(0);
 
+  const [categoryList, setCategoryList] = useState<string[]>([]);
   const [movements, setMovements] = useState<StockMovement[]>([]);
   const [historyProduct, setHistoryProduct] = useState("");
 
@@ -424,6 +441,21 @@ export default function InventoryPage({ onChanged }: InventoryPageProps) {
     let cancelled = false;
 
     api
+      .getCategories()
+      .then((list) => {
+        if (!cancelled) setCategoryList(list.map((c) => c.name));
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, [reloadKey]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    api
       .getStockMovements(historyProduct ? Number(historyProduct) : undefined)
       .then((result) => {
         if (!cancelled) setMovements(result);
@@ -440,9 +472,13 @@ export default function InventoryPage({ onChanged }: InventoryPageProps) {
   const items = useMemo(() => data?.items ?? [], [data]);
   const summary = data?.summary;
 
+  // The managed category list, plus any category already used by a product.
   const categories = useMemo(
-    () => [...new Set(items.map((item) => item.category))].sort(),
-    [items]
+    () =>
+      [...new Set([...categoryList, ...items.map((item) => item.category)])].sort(
+        (a, b) => a.localeCompare(b)
+      ),
+    [categoryList, items]
   );
 
   const visibleItems = items.filter((item) => {

@@ -1,61 +1,64 @@
-"""Fill the database with synthetic motorcycle-dealership sales and stock.
+"""Fill the database with synthetic sales and stock for any business profile.
 
 Run from the backend folder (the one that contains the `app` package):
 
-    python -m app.seed                 # 90 days of data ending today
-    python -m app.seed --days 180      # a longer history
-    python -m app.seed --reset         # wipe products, sales and stock first
+    python -m app.seed --profile farm                  # 90 days of data ending today
+    python -m app.seed --profile farm --days 180       # a longer history
+    python -m app.seed --profile farm --reset          # wipe products, sales and stock first
+
+Profiles are JSON files in app/seed_profiles/ (or give a path to your own).
 
 The random seed is fixed, so every run produces the same data.
 Opening stock is sized so that after all the seeded sales, each product ends up
 with the "remaining" quantity below (some low, one out of stock).
 """
 import argparse
+import json
 import random
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal
+from pathlib import Path
 
 from sqlalchemy.orm import Session
 
 from . import models
 from .database import Base, engine
 from .migrations import ensure_columns
+from .routers.categories import ensure_category
 
-# (name, category, price, cost, max qty per line, reorder level, remaining stock)
-# remaining=None means stock is not tracked (services).
-CATALOG = [
-    ("Honda Click 160", "Motorcycles", "112900", "96000", 1, 2, 4),
-    ("Yamaha Mio Gear 125", "Motorcycles", "78900", "66500", 1, 2, 1),
-    ("Suzuki Raider R150", "Motorcycles", "104900", "89000", 1, 2, 3),
-    ("Kawasaki Rouser NS200", "Motorcycles", "149900", "127000", 1, 1, 0),
-    ("Honda ADV 160", "Motorcycles", "166900", "141000", 1, 1, 2),
-    ("Full-face helmet", "Accessories", "3500", "2100", 2, 10, 28),
-    ("Half-face helmet", "Accessories", "1800", "1000", 2, 10, 6),
-    ("Riding gloves", "Accessories", "1200", "650", 2, 10, 22),
-    ("Phone holder mount", "Accessories", "650", "300", 3, 8, 40),
-    ("Rain jacket set", "Accessories", "950", "520", 2, 8, 5),
-    ("Engine oil 1L", "Parts", "450", "290", 4, 20, 45),
-    ("Brake pads (set)", "Parts", "850", "480", 3, 10, 12),
-    ("Drive belt", "Parts", "1750", "1100", 2, 8, 4),
-    ("Spark plug", "Parts", "280", "140", 4, 20, 60),
-    ("Tire 80/90-14", "Parts", "1650", "1050", 2, 8, 15),
-    ("Oil change service", "Services", "350", "120", 1, 0, None),
-    ("Tune-up service", "Services", "950", "380", 1, 0, None),
-    ("Brake service", "Services", "700", "260", 1, 0, None),
-]
+PROFILE_DIR = Path(__file__).parent / "seed_profiles"
 
-# Products that also get a "damaged" write-off, to make the history realistic.
-WRITE_OFFS = {"Full-face helmet": 1, "Riding gloves": 2}
 
-# Relative chance that a sale line is for each category.
-CATEGORY_WEIGHTS = {"Motorcycles": 1, "Accessories": 5, "Parts": 6, "Services": 4}
+def load_profile(name_or_path: str):
+    """Read a business profile (JSON) and return what the seeder needs."""
+    path = Path(name_or_path)
+    if not path.is_file():
+        path = PROFILE_DIR / f"{name_or_path}.json"
+    if not path.is_file():
+        available = sorted(p.stem for p in PROFILE_DIR.glob("*.json"))
+        raise SystemExit(f"Profile '{name_or_path}' not found. Available: {available}")
+
+    data = json.loads(path.read_text(encoding="utf-8"))
+    # (name, category, price, cost, max qty per line, reorder level, remaining stock)
+    # remaining=None means stock is not tracked (services).
+    catalog = [
+        (p["name"], p["category"], str(p["price"]), str(p.get("cost", p["price"])),
+         int(p.get("max_qty", 1)), int(p.get("reorder_level", 0)), p.get("remaining"))
+        for p in data["products"]
+    ]
+    categories = list(dict.fromkeys(row[1] for row in catalog))
+    weights = data.get("category_weights", {})
+    category_weights = {c: weights.get(c, 1) for c in categories}  # default weight 1
+    return catalog, category_weights, data.get("write_offs", {}), data.get("prefix", "TX")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Seed the database with sample sales and stock.")
+    parser.add_argument("--profile", required=True, help="profile name in seed_profiles/ or a path to a .json file")
     parser.add_argument("--days", type=int, default=90, help="days of history ending today")
     parser.add_argument("--reset", action="store_true", help="delete existing sales, stock and products first")
     args = parser.parse_args()
+    CATALOG, CATEGORY_WEIGHTS, WRITE_OFFS, prefix = load_profile(args.profile)
 
     Base.metadata.create_all(bind=engine)
     ensure_columns(engine)
@@ -67,6 +70,7 @@ def main() -> None:
             db.query(models.SaleItem).delete()
             db.query(models.Sale).delete()
             db.query(models.Product).delete()
+            db.query(models.Category).delete()
             db.commit()
         elif db.query(models.Sale).first():
             print("Sales already exist. Use --reset to replace them.")
@@ -84,6 +88,8 @@ def main() -> None:
             product.track_stock = remaining is not None
             products[name] = (product, max_qty)
         db.flush()
+        for _name, category, *_rest in CATALOG:
+            ensure_category(db, category)
 
         by_category: dict[str, list[str]] = {}
         for name, category, *_ in CATALOG:
@@ -103,7 +109,7 @@ def main() -> None:
 
             for number in range(1, sales_today + 1):
                 sale = models.Sale(
-                    reference_number=f"MM-{day:%Y%m%d}-{number:03d}",
+                    reference_number=f"{prefix}-{day:%Y%m%d}-{number:03d}",
                     sale_date=day,
                     status="completed",
                 )

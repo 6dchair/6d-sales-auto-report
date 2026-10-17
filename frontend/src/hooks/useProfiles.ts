@@ -11,7 +11,7 @@ interface StoredProfiles {
   activeId: string;
 }
 
-const STORAGE_KEY = "motometrics.profiles";
+const STORAGE_KEY = "6dmetrix.profiles";
 
 const DEFAULT_STATE: StoredProfiles = {
   profiles: [{ id: "admin-1", name: "Administrator", role: "Store manager" }],

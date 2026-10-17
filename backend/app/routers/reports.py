@@ -269,13 +269,13 @@ def report_csv(
 def report_pdf(
     start_date: date | None = None,
     end_date: date | None = None,
-    system_name: str = Query("MotoMetrics", min_length=1, max_length=60),
+    system_name: str = Query("6dMetrix", min_length=1, max_length=60),
     db: Session = Depends(get_db),
 ):
     start, end = resolve_range(start_date, end_date)
     report = build_report(db, start, end)
     return Response(
-        content=build_pdf(report, system_name.strip() or "MotoMetrics"),
+        content=build_pdf(report, system_name.strip() or "6dMetrix"),
         media_type="application/pdf",
         headers={"Content-Disposition": f'attachment; filename="sales-report-{start}-to-{end}.pdf"'},
     )
